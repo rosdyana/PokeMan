@@ -17,6 +17,8 @@ public class PacmanController : MonoBehaviour
 
     private new Animation animation;
 
+    private bool isMoving = true;
+
     public void Reset()
     {
         transform.position = initialPosition;
@@ -37,13 +39,29 @@ public class PacmanController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        var isMoving = true;
 
-        if (Input.GetKey(KeyCode.UpArrow)) currentDirection = up;
-        else if (Input.GetKey(KeyCode.RightArrow)) currentDirection = right;
-        else if (Input.GetKey(KeyCode.DownArrow)) currentDirection = down;
-        else if (Input.GetKey(KeyCode.LeftArrow)) currentDirection = left;
-        else isMoving = false;
+        if (Input.GetKey(KeyCode.UpArrow))
+        {
+            currentDirection = up;
+            isMoving = true;
+        }
+        else if (Input.GetKey(KeyCode.RightArrow))
+        {
+            currentDirection = right;
+            isMoving = true;
+        }
+        else if (Input.GetKey(KeyCode.DownArrow))
+        {
+            currentDirection = down;
+            isMoving = true;
+        }
+        else if (Input.GetKey(KeyCode.LeftArrow))
+        {
+            currentDirection = left;
+            isMoving = true;
+        }
+        // keeps moving? ok...
+        // else isMoving = false;
 
         transform.localEulerAngles = currentDirection;
         if (isMoving)
@@ -51,10 +69,21 @@ public class PacmanController : MonoBehaviour
             animation.Play("Running");
             transform.Translate(Vector3.forward * MovementSpeed * Time.deltaTime);
         }
-        else
-        {
-            animation.Play("Idle");
-        }
+        //else
+        //{
+        //    animation.Play("Idle");
+        //}
 
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        Debug.Log(collision.gameObject.tag);
+        if (collision.gameObject.tag == "Walls")
+        {
+            animation.Stop();
+            animation.Play("Idle");
+            isMoving = false;
+        }
     }
 }
