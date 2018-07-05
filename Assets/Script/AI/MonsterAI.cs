@@ -37,20 +37,33 @@ public class MonsterAI : MonoBehaviour
 
         if (collision.gameObject.tag == "Pacman")
         {
-            // todo if pacman got powerup
-            //animation.Stop();
-            //animation.Play("Zombie Death");
-            //StartCoroutine(DelayDeactivate());
-            animation.Stop();
-            hitPacman = true;
-            animation.Play("Victory");
-            if (pcInstance.PacmanHealth != 0)
-                StartCoroutine(DelayDeactivate());
+            if (pcInstance.isPowerUp)
+            {
+                animation.Stop();
+                hitPacman = true;
+                animation.Play("Zombie Death");
+                StartCoroutine(DelayDeathPose());
+            }
+            else
+            {
+                animation.Stop();
+                hitPacman = true;
+                animation.Play("Victory");
+                if (pcInstance.PacmanHealth != 0)
+                    StartCoroutine(DelayVictoryPose());
+            }
         }
     }
-    IEnumerator DelayDeactivate()
+
+    IEnumerator DelayVictoryPose()
     {
         yield return new WaitForSeconds(5f);
         hitPacman = false;
+    }
+
+    IEnumerator DelayDeathPose()
+    {
+        yield return new WaitForSeconds(5f);
+        Destroy(gameObject);
     }
 }

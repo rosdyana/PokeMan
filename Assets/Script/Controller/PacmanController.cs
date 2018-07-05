@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using TMPro;
 
 public class PacmanController : MonoBehaviour
@@ -10,6 +11,10 @@ public class PacmanController : MonoBehaviour
     public GameObject heart1, heart2, heart3;
 
     public GameObject pauseMenuUI;
+    public GameObject gameoverMenuUI;
+    public GameObject gameWinMenuUI;
+
+    public bool isPowerUp = false;
 
     private Vector3 up = Vector3.zero,
         right = new Vector3(0, 90, 0),
@@ -19,15 +24,22 @@ public class PacmanController : MonoBehaviour
 
     private TextMeshProUGUI ScoreText;
 
+    [SerializeField]
+    private GameObject PowerUPtxt;
+    [SerializeField]
+    private Text PowerUpCountdownText;
+
     private Vector3 initialPosition = Vector3.zero;
 
     private new Animation animation;
 
     private bool isMoving = true;
     private bool isDie = false;
+    private bool isWin = false;
 
     private int score = 0;
     private int health = 3;
+    private float timer = 5f;
 
     public int PacmanHealth { get; private set; }
 
@@ -49,6 +61,7 @@ public class PacmanController : MonoBehaviour
         PacmanHealth = health;
         initialPosition = transform.position;
         ScoreText = GameObject.Find("ScoreTxt").GetComponent<TextMeshProUGUI>();
+
         animation = GetComponent<Animation>();
         Reset();
     }
@@ -117,6 +130,33 @@ public class PacmanController : MonoBehaviour
                 break;
         }
 
+        if (isPowerUp)
+        {
+            if (timer <= 0f)
+            {
+                PowerUPtxt.SetActive(false);
+                timer = 5f;
+            }
+            else
+            {
+                PowerUPtxt.SetActive(true);
+                timer -= Time.deltaTime;
+                PowerUpCountdownText.text = timer.ToString("F");
+            }
+
+        }
+
+        if (score >= 10)
+        {
+            if (!isWin)
+            {
+                // game win
+                gameWinMenuUI.SetActive(true);
+                Time.timeScale = 0f;
+                isWin = true;
+            }
+        }
+
 
     }
 
@@ -139,13 +179,15 @@ public class PacmanController : MonoBehaviour
 
         if (collision.gameObject.tag == "Monster")
         {
-            isDie = true;
-            PacmanHealth -= 1;
-            isMoving = false;
-            animation.Stop();
-            animation.Play("Dying");
-            StartCoroutine(DelayDeactivate());
-
+            if (!isPowerUp)
+            {
+                isDie = true;
+                PacmanHealth -= 1;
+                isMoving = false;
+                animation.Stop();
+                animation.Play("Dying");
+                StartCoroutine(DelayDeactivate());
+            }
 
         }
     }
@@ -165,7 +207,7 @@ public class PacmanController : MonoBehaviour
         else
         {
             // game over ?
-            pauseMenuUI.SetActive(true);
+            gameoverMenuUI.SetActive(true);
             Time.timeScale = 0f;
         }
     }
