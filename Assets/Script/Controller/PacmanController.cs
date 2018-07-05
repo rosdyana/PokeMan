@@ -1,12 +1,12 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
+using TMPro;
 
 public class PacmanController : MonoBehaviour
 {
-    public Text ScoreText;
     public float MovementSpeed = 0f;
+
     public GameObject heart1, heart2, heart3;
 
     private Vector3 up = Vector3.zero,
@@ -14,6 +14,8 @@ public class PacmanController : MonoBehaviour
         down = new Vector3(0, 180, 0),
         left = new Vector3(0, 270, 0),
         currentDirection = Vector3.zero;
+
+    private TextMeshProUGUI ScoreText;
 
     private Vector3 initialPosition = Vector3.zero;
 
@@ -34,13 +36,17 @@ public class PacmanController : MonoBehaviour
 
         currentDirection = down;
         isDie = false;
+        isMoving = true;
     }
     // Use this for initialization
     void Start()
     {
+        isDie = false;
+        isMoving = true;
         QualitySettings.vSyncCount = 0;
         PacmanHealth = health;
         initialPosition = transform.position;
+        ScoreText = GameObject.Find("ScoreTxt").GetComponent<TextMeshProUGUI>();
         animation = GetComponent<Animation>();
         Reset();
     }
