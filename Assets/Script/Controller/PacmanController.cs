@@ -9,6 +9,8 @@ public class PacmanController : MonoBehaviour
 
     public GameObject heart1, heart2, heart3;
 
+    public GameObject pauseMenuUI;
+
     private Vector3 up = Vector3.zero,
         right = new Vector3(0, 90, 0),
         down = new Vector3(0, 180, 0),
@@ -159,6 +161,12 @@ public class PacmanController : MonoBehaviour
         {
             gameObject.SetActive(true);
             Reset();
+        }
+        else
+        {
+            // game over ?
+            pauseMenuUI.SetActive(true);
+            Time.timeScale = 0f;
         }
     }
 }
