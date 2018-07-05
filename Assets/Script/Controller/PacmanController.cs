@@ -25,9 +25,11 @@ public class PacmanController : MonoBehaviour
     private TextMeshProUGUI ScoreText;
 
     [SerializeField]
-    private GameObject PowerUPtxt;
+    private GameObject PowerUpTxt;
     [SerializeField]
     private Text PowerUpCountdownText;
+    [SerializeField]
+    private int goals = 242;
 
     private Vector3 initialPosition = Vector3.zero;
 
@@ -51,6 +53,7 @@ public class PacmanController : MonoBehaviour
         currentDirection = down;
         isDie = false;
         isMoving = true;
+
     }
     // Use this for initialization
     void Start()
@@ -59,6 +62,7 @@ public class PacmanController : MonoBehaviour
         isMoving = true;
         QualitySettings.vSyncCount = 0;
         PacmanHealth = health;
+
         initialPosition = transform.position;
         ScoreText = GameObject.Find("ScoreTxt").GetComponent<TextMeshProUGUI>();
 
@@ -132,21 +136,23 @@ public class PacmanController : MonoBehaviour
 
         if (isPowerUp)
         {
-            if (timer <= 0f)
+            Debug.Log(timer);
+            if (timer < 0f)
             {
-                PowerUPtxt.SetActive(false);
+                Debug.Log("timer habis");
+                PowerUpTxt.SetActive(false);
                 timer = 5f;
             }
             else
             {
-                PowerUPtxt.SetActive(true);
+                PowerUpTxt.SetActive(true);
                 timer -= Time.deltaTime;
                 PowerUpCountdownText.text = timer.ToString("F");
             }
 
         }
 
-        if (score >= 10)
+        if (score >= goals)
         {
             if (!isWin)
             {
