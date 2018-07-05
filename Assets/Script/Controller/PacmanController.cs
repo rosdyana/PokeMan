@@ -29,7 +29,7 @@ public class PacmanController : MonoBehaviour
     [SerializeField]
     private Text PowerUpCountdownText;
     [SerializeField]
-    private int goals = 242;
+    private int goals = 250; // don't need to finish all pallet, it's tired
 
     private Vector3 initialPosition = Vector3.zero;
 
@@ -104,10 +104,7 @@ public class PacmanController : MonoBehaviour
                 animation.Play("Running");
                 transform.Translate(Vector3.forward * MovementSpeed * Time.deltaTime);
             }
-            //else
-            //{
-            //    animation.Play("Idle");
-            //}
+
         }
         ScoreText.text = (score * 10).ToString();
         switch (PacmanHealth)
@@ -136,8 +133,7 @@ public class PacmanController : MonoBehaviour
 
         if (isPowerUp)
         {
-            Debug.Log(timer);
-            if (timer < 0f)
+            if (timer < 0)
             {
                 Debug.Log("timer habis");
                 PowerUpTxt.SetActive(false);

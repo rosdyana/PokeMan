@@ -7,9 +7,17 @@ public class MonsterAI : MonoBehaviour
 {
     public Transform MainChar;
     public NavMeshAgent agent;
+    private Vector3 initialPosition = Vector3.zero;
     private new Animation animation;
     private bool hitPacman = false;
     PacmanController pcInstance = null;
+
+    public void Reset()
+    {
+        transform.position = initialPosition;
+        hitPacman = false;
+    }
+
     // Use this for initialization
     void Start()
     {
@@ -64,6 +72,6 @@ public class MonsterAI : MonoBehaviour
     IEnumerator DelayDeathPose()
     {
         yield return new WaitForSeconds(5f);
-        Destroy(gameObject);
+        Reset();
     }
 }
