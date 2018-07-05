@@ -90,5 +90,17 @@ public class PacmanController : MonoBehaviour
             Debug.Log("GOTCHA");
             collision.gameObject.SetActive(false);
         }
+        if (collision.gameObject.tag == "Monster")
+        {
+            isMoving = false;
+            animation.Stop();
+            animation.Play("Dying");
+            StartCoroutine(DelayDeactivate());
+        }
+    }
+    IEnumerator DelayDeactivate()
+    {
+        yield return new WaitForSeconds(5f);
+        gameObject.SetActive(false);
     }
 }
