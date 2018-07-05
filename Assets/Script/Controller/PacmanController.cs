@@ -78,12 +78,17 @@ public class PacmanController : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        Debug.Log(collision.gameObject.tag);
+
         if (collision.gameObject.tag == "Walls")
         {
             animation.Stop();
             animation.Play("Idle");
             isMoving = false;
+        }
+        if (collision.gameObject.tag == "Waypoint")
+        {
+            Debug.Log("GOTCHA");
+            collision.gameObject.SetActive(false);
         }
     }
 }
