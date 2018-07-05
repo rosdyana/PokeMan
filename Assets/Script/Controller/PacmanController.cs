@@ -1,11 +1,13 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PacmanController : MonoBehaviour
 {
-
+    public Text ScoreText;
     public float MovementSpeed = 0f;
+    public GameObject heart1, heart2, heart3;
 
     private Vector3 up = Vector3.zero,
         right = new Vector3(0, 90, 0),
@@ -20,18 +22,24 @@ public class PacmanController : MonoBehaviour
     private bool isMoving = true;
     private bool isDie = false;
 
+    private int score = 0;
+    private int health = 3;
+
+    public int PacmanHealth { get; private set; }
+
     public void Reset()
     {
         transform.position = initialPosition;
         animation.Play("Idle");
 
         currentDirection = down;
+        isDie = false;
     }
     // Use this for initialization
     void Start()
     {
         QualitySettings.vSyncCount = 0;
-
+        PacmanHealth = health;
         initialPosition = transform.position;
         animation = GetComponent<Animation>();
         Reset();
@@ -76,6 +84,30 @@ public class PacmanController : MonoBehaviour
             //    animation.Play("Idle");
             //}
         }
+        ScoreText.text = (score * 10).ToString();
+        switch (PacmanHealth)
+        {
+            case 3:
+                heart1.gameObject.SetActive(true);
+                heart2.gameObject.SetActive(true);
+                heart3.gameObject.SetActive(true);
+                break;
+            case 2:
+                heart1.gameObject.SetActive(true);
+                heart2.gameObject.SetActive(true);
+                heart3.gameObject.SetActive(false);
+                break;
+            case 1:
+                heart1.gameObject.SetActive(true);
+                heart2.gameObject.SetActive(false);
+                heart3.gameObject.SetActive(false);
+                break;
+            case 0:
+                heart1.gameObject.SetActive(false);
+                heart2.gameObject.SetActive(false);
+                heart3.gameObject.SetActive(false);
+                break;
+        }
 
 
     }
@@ -93,21 +125,34 @@ public class PacmanController : MonoBehaviour
             if (collision.gameObject.tag == "Waypoint")
             {
                 collision.gameObject.SetActive(false);
+                score += 1;
             }
         }
 
         if (collision.gameObject.tag == "Monster")
         {
+            isDie = true;
+            PacmanHealth -= 1;
             isMoving = false;
             animation.Stop();
             animation.Play("Dying");
             StartCoroutine(DelayDeactivate());
-            isDie = true;
+
+
         }
     }
     IEnumerator DelayDeactivate()
     {
         yield return new WaitForSeconds(5f);
-        gameObject.SetActive(false);
+        Respawn(PacmanHealth);
+    }
+
+    private void Respawn(int health)
+    {
+        if (health >= 1)
+        {
+            gameObject.SetActive(true);
+            Reset();
+        }
     }
 }

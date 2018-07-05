@@ -9,9 +9,13 @@ public class MonsterAI : MonoBehaviour
     public NavMeshAgent agent;
     private new Animation animation;
     private bool hitPacman = false;
+    PacmanController pcInstance = null;
     // Use this for initialization
     void Start()
     {
+        GameObject tempObj = GameObject.FindGameObjectWithTag("Pacman");
+        pcInstance = tempObj.GetComponent<PacmanController>();
+
         animation = GetComponent<Animation>();
     }
 
@@ -25,8 +29,6 @@ public class MonsterAI : MonoBehaviour
             agent.SetDestination(MainChar.position);
             animation.Play("Zombie Run");
         }
-
-
 
     }
 
@@ -42,11 +44,13 @@ public class MonsterAI : MonoBehaviour
             animation.Stop();
             hitPacman = true;
             animation.Play("Victory");
+            if (pcInstance.PacmanHealth != 0)
+                StartCoroutine(DelayDeactivate());
         }
     }
     IEnumerator DelayDeactivate()
     {
         yield return new WaitForSeconds(5f);
-        gameObject.SetActive(false);
+        hitPacman = false;
     }
 }
