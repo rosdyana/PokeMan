@@ -18,6 +18,7 @@ public class PacmanController : MonoBehaviour
     private new Animation animation;
 
     private bool isMoving = true;
+    private bool isDie = false;
 
     public void Reset()
     {
@@ -39,63 +40,69 @@ public class PacmanController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (!isDie)
+        {
+            if (Input.GetKey(KeyCode.UpArrow))
+            {
+                currentDirection = up;
+                isMoving = true;
+            }
+            else if (Input.GetKey(KeyCode.RightArrow))
+            {
+                currentDirection = right;
+                isMoving = true;
+            }
+            else if (Input.GetKey(KeyCode.DownArrow))
+            {
+                currentDirection = down;
+                isMoving = true;
+            }
+            else if (Input.GetKey(KeyCode.LeftArrow))
+            {
+                currentDirection = left;
+                isMoving = true;
+            }
+            // keeps moving? ok...
+            // else isMoving = false;
 
-        if (Input.GetKey(KeyCode.UpArrow))
-        {
-            currentDirection = up;
-            isMoving = true;
+            transform.localEulerAngles = currentDirection;
+            if (isMoving)
+            {
+                animation.Play("Running");
+                transform.Translate(Vector3.forward * MovementSpeed * Time.deltaTime);
+            }
+            //else
+            //{
+            //    animation.Play("Idle");
+            //}
         }
-        else if (Input.GetKey(KeyCode.RightArrow))
-        {
-            currentDirection = right;
-            isMoving = true;
-        }
-        else if (Input.GetKey(KeyCode.DownArrow))
-        {
-            currentDirection = down;
-            isMoving = true;
-        }
-        else if (Input.GetKey(KeyCode.LeftArrow))
-        {
-            currentDirection = left;
-            isMoving = true;
-        }
-        // keeps moving? ok...
-        // else isMoving = false;
 
-        transform.localEulerAngles = currentDirection;
-        if (isMoving)
-        {
-            animation.Play("Running");
-            transform.Translate(Vector3.forward * MovementSpeed * Time.deltaTime);
-        }
-        //else
-        //{
-        //    animation.Play("Idle");
-        //}
 
     }
 
     private void OnCollisionEnter(Collision collision)
     {
+        if (!isDie)
+        {
+            if (collision.gameObject.tag == "Walls")
+            {
+                animation.Stop();
+                animation.Play("Idle");
+                isMoving = false;
+            }
+            if (collision.gameObject.tag == "Waypoint")
+            {
+                collision.gameObject.SetActive(false);
+            }
+        }
 
-        if (collision.gameObject.tag == "Walls")
-        {
-            animation.Stop();
-            animation.Play("Idle");
-            isMoving = false;
-        }
-        if (collision.gameObject.tag == "Waypoint")
-        {
-            Debug.Log("GOTCHA");
-            collision.gameObject.SetActive(false);
-        }
         if (collision.gameObject.tag == "Monster")
         {
             isMoving = false;
             animation.Stop();
             animation.Play("Dying");
             StartCoroutine(DelayDeactivate());
+            isDie = true;
         }
     }
     IEnumerator DelayDeactivate()
