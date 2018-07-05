@@ -5,6 +5,8 @@ PokéMan - Unofficial Pokémon game in style with Pacman
 - Low Poly Park ( https://assetstore.unity.com/packages/3d/environments/urban/low-poly-park-61922 )
 - 3D Character ( https://www.mixamo.com/#/?page=1&type=Character )
 - Character Animations ( https://www.mixamo.com/#/?page=1&type=Motion%2CMotionPack )
+- Text Mesh Pro ( https://docs.unity3d.com/Packages/com.unity.textmeshpro@1.2/index.html )
+- Pikachu ( https://poly.google.com/view/5a0G690T7Se )
 
 ## Requirement:
 - [x] User can start Game in the begining, restart game after game win/lose.

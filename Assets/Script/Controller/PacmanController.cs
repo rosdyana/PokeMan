@@ -47,6 +47,7 @@ public class PacmanController : MonoBehaviour
 
     public void Reset()
     {
+        PowerUpTxt.SetActive(false);
         transform.position = initialPosition;
         animation.Play("Idle");
 
@@ -58,6 +59,7 @@ public class PacmanController : MonoBehaviour
     // Use this for initialization
     void Start()
     {
+        PowerUpTxt.SetActive(false);
         isDie = false;
         isMoving = true;
         QualitySettings.vSyncCount = 0;
@@ -135,7 +137,6 @@ public class PacmanController : MonoBehaviour
         {
             if (timer < 0)
             {
-                Debug.Log("timer habis");
                 PowerUpTxt.SetActive(false);
                 timer = 5f;
             }
