@@ -21,3 +21,6 @@ PokéMan - Unofficial Pokémon game in style with Pacman
 - [x] Input:
     - [x] Left/Right/Up/Down Key: controls Pac-Man moving direction
 	
+	
+## Demo Video
+[![PokeMan](http://img.youtube.com/vi/o7vdZA3ewfQ/0.jpg)](http://www.youtube.com/watch?v=o7vdZA3ewfQ)
